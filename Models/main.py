@@ -601,15 +601,14 @@ class Model:
 			if len(users[0]) != 4:
 				return {'status': 500, 'message': "Невірно складена таблиця!", 'user': None}
 
-			order_id = round(time() * 1000)
-
 			if None not in [task_schedule, task_schedule_run_datetime] and False not in [task_schedule, task_schedule_run_datetime]:
 				try:
+					created_at = round(time() * 1000)
 					file = self.otherOperations.file_handling(file.file)
 					user_tasks = dynamodb_client.get_item(TableName=dynamodb_table_tasks, Key={"email": {"S": auth_email}})
 					tasks = user_tasks.get('Item', {}).get('tasks', {}).get('S', None)
 					tasks = json.loads(tasks) if tasks is not None else None
-					new_task = {'target': 'invoice', 'time': task_schedule_run_datetime, 'created_at': order_id, 'file': file, 'auth_email': auth_email, 'public_key': public_key, 'private_key': private_key, 'company': company}
+					new_task = {'target': 'invoice', 'time': task_schedule_run_datetime, 'created_at': created_at, 'file': file, 'auth_email': auth_email, 'public_key': public_key, 'private_key': private_key, 'company': company}
 					if isinstance(tasks, list):
 						for task in tasks:
 							if task['target'] == 'invoice' and task['time'] == task_schedule_run_datetime:
@@ -640,7 +639,8 @@ class Model:
 				if None not in [name, email, number, amount]:
 					if_number_correct = self.otherOperations.correct_phone_number(number)
 					if_email_correct = self.otherOperations.correct_email_address(email)
-
+					order_id = round(time() * 1000)
+					
 					if if_number_correct and if_email_correct:
 						date_time = datetime.now().strftime("%m/%d/%Y")
 						liqpay = LiqPay(public_key, private_key)
