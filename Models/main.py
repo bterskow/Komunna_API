@@ -655,10 +655,7 @@ class Model:
 							"order_id"  : order_id,
 						}) 
 
-						if res["status"] in ["invoice_wait", "success"]:
-							amount_spent += 0.15
-						else:
-							return {'status': 500, 'message': f"Неуспішний платіж. Некоректно заповнені дані!", 'user': None}
+						amount_spent += 0.15
 
 
 			self.credit(auth_email, amount_spent)
