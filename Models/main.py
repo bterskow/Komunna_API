@@ -553,6 +553,22 @@ class Model:
 			return {"status": 500, "message": "Видалення відкладеної задачі не виконано! Спробуйте ще раз!"}
 
 
+	def all_tasks_schedule(self, data):
+		try:
+			auth_email = data.get('auth_email')
+
+			if None in [auth_email]:
+				return {'status': 500, 'message': "Не вказані усі потрібні параметри для відображення списку відкладених задач!", 'tasks': None}
+
+			user = dynamodb_client.get_item(TableName=dynamodb_table_tasks, Key={"email": {"S": auth_email}})
+			tasks = user.get('Item', {}).get('tasks', {}).get('S', [])
+
+			return {'status': 200, 'message': None, 'tasks': json.loads(tasks)}			
+		except Exception as e:
+			logger.error(str(e))
+			return {"status": 500, "message": "Відображення списку відкладених задач не виконано! Спробуйте ще раз!", 'tasks': None}
+			
+
 	def send_invoices(self, data):
 		try:
 			auth_email = data.get('auth_email')

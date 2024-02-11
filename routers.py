@@ -178,5 +178,16 @@ def delete_task_schedule(data: str = Form(...)):
         return JSONResponse(content={'status': 500, 'message': str(e), 'user': None}, status_code=500)
 
 
+@app.post('/all_tasks_schedule', name='all_tasks_schedule', description='Show tasks schedule list for owner.')
+def all_tasks_schedule(data: str = Form(...)):
+    try:
+        data = json.loads(data)
+        all_tasks_schedule = model.all_tasks_schedule(data)
+        return JSONResponse(content={'status': all_tasks_schedule['status'], 'message': all_tasks_schedule['message'], 'tasks': all_tasks_schedule['tasks']}, status_code=200)
+
+    except Exception as e:
+        return JSONResponse(content={'status': 500, 'message': str(e), 'user': None}, status_code=500)
+
+
 if __name__ == '__main__':
 	uvicorn.run('routers:app', host='127.0.0.1', port=8000, reload=True)
