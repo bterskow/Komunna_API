@@ -655,6 +655,8 @@ class Model:
 							"order_id"  : order_id,
 						}) 
 
+						logger.info(res)
+
 						amount_spent += 0.15
 
 
