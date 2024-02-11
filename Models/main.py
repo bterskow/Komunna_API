@@ -68,7 +68,7 @@ class OtherOperations:
 
 
 	def file_handling(self, file):
-		read_file = pd.read_excel(file, engine='openpyxl')
+		read_file = pd.read_excel(file)
 		users = read_file.values.tolist()
 		return users
 
