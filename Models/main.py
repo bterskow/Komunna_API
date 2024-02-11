@@ -561,7 +561,7 @@ class Model:
 				return {'status': 500, 'message': "Не вказані усі потрібні параметри для відображення списку відкладених задач!", 'tasks': None}
 
 			user = dynamodb_client.get_item(TableName=dynamodb_table_tasks, Key={"email": {"S": auth_email}})
-			tasks = user.get('Item', {}).get('tasks', {}).get('S', [])
+			tasks = user.get('Item', {}).get('tasks', {}).get('S', "[]")
 			return {'status': 200, 'message': None, 'tasks': tasks}			
 		except Exception as e:
 			logger.error(str(e))
